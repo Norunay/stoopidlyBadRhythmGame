@@ -1,0 +1,71 @@
+startMusicfunction makeBpm(){
+      setPosition([position[0]+=1]);
+    }
+    function liner(){
+      setCurrentPos([currentPos[0]+=Math.floor(1/10)]);
+    }
+
+    function startMusic(){
+      music = setInterval(makeBpm,beatPerSec*1000);
+      line = setInterval(liner,beatPerSec*100);
+    }
+    function stopMusic(){
+      clearInterval(music);
+      clearInterval(line);
+    }
+    
+    useEffect(_=>{
+      if(position[0] >= nextBeat){
+        setLastBeat(s=>s+=beatPerSec);
+        setNextBeat(n=>n+=beatPerSec);
+        setActiveBeatStart(position[0] - calibration/1000);
+        setActiveBeatEnd(position[0] + calibration/1000);        
+      }
+
+      // !-------------------------------------------------------------------------------------------------------
+        if(compose.ac == goal.beat && compose.ke == goal.user_inp){
+          setPerfects(p=>p+=1);
+        }else{
+          setErrors(e=>e+=1);
+        }
+
+        setGoal({user_inp: LVL1[index], beat: nextBeat});
+        console.log(goal);
+        console.log(errrors);
+        console.log(perfects);
+        console.log(currentPos);
+        
+
+    }, position);
+    
+    useEffect(_=>{
+      // $ SETACTIVEBEAT SETACTIVEBEAT SETACTIVEBEAT SETACTIVEBEAT SETACTIVEBEAT SETACTIVEBEAT
+        
+        if(currentPos[0] >= activeBeatStart && currentPos[0] <= activeBeatEnd) {
+          setActiveBeat(nextBeat);
+          settr(true);       
+        }else {
+          setActiveBeat(-1);
+          settr(false);
+        };
+
+        
+        // ! ----------------------------------------------------------------------------------------------------------------------
+
+            const runIt = (e) => {
+              click.pause();
+              click.currentTime = 0;
+              click.play();
+              setCompose({ke: e.key, ac: activeBeat});
+              console.log('test composed:' , compose);
+            }
+
+            document.addEventListener('keypress', runIt);
+            return _=>{
+              document.removeEventListener('keypress', runIt);
+            }
+            
+      // $ SETACTIVEBEAT SETACTIVEBEAT SETACTIVEBEAT SETACTIVEBEAT SETACTIVEBEAT SETACTIVEBEAT
+    }, currentPos)
+
+  // * BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT BEAT
